@@ -97,6 +97,8 @@ class cnnTextNetwork(Configurable):
         feature, target = batch['text'], batch['label']
         feature = Variable(torch.from_numpy(feature))
         target = Variable(torch.from_numpy(target))[:,0]
+        if torch.cuda.is_available():
+          feature, target = feature.cuda(), target.cuda()
         optimizer.zero_grad() # Clears the gradients of all optimized Variable
         logit = self.model(feature)
         loss = F.cross_entropy(logit, target)
@@ -140,7 +142,8 @@ class cnnTextNetwork(Configurable):
       feature, target = batch['text'], batch['label']
       feature = Variable(torch.from_numpy(feature))
       target = Variable(torch.from_numpy(target))[:,0]
-
+      if torch.cuda.is_available():
+        feature, target = feature.cuda(), target.cuda()
 
       logit = self.model(feature)
       preds = torch.max(logit, 1)[1].view(target.size())  # get the index
