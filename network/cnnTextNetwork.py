@@ -107,11 +107,13 @@ class cnnTextNetwork(Configurable):
           optimizer.step()
           step += 1
           preds = torch.max(logit, 1)[1].view(target.size())  # get the index
-          acc_corrects += preds.eq(target).cpu().sum()
+          acc_corrects += (preds.data == target.data).sum()
           acc_sents += batch['batch_size']
           if step % self.log_interval == 0:
-            accuracy = acc_corrects.data.numpy() / float(acc_sents) * 100.0
+            accuracy = float(acc_corrects) / float(acc_sents) * 100.0
             print("## [Batch %d] Accuracy : %5.2f" % (step, accuracy))
+            acc_corrects = 0
+            acc_sents = 0
 
           if step == 1 or step % self.valid_interval == 0:
             accuracy = self.test(validate=True)
@@ -148,9 +150,9 @@ class cnnTextNetwork(Configurable):
 
       logit = self.model(feature)
       preds = torch.max(logit, 1)[1].view(target.size())  # get the index
-      test_corrects += preds.eq(target).cpu().sum()
+      test_corrects += (preds.data == target.data).sum()
       test_sents += batch['batch_size']
-    return test_corrects.data.numpy() / float(test_sents) * 100.0
+    return float(test_corrects) / float(test_sents) * 100.0
 
   @property
   def words(self):

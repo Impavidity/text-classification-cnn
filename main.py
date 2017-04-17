@@ -11,6 +11,8 @@ import os
 if __name__=='__main__':
 
   import argparse
+  torch.manual_seed(1)
+  np.random.seed(1)
 
   argparser = argparse.ArgumentParser()
   argparser.add_argument('--train', action='store_true')
@@ -55,8 +57,7 @@ if __name__=='__main__':
   if not os.path.exists(network.save_dir):
     os.mkdir(network.save_dir)
 
-  torch.manual_seed(1)
-  np.random.seed(1)
+
   # if torch.cuda.is_available():
   #   torch.cuda.manual_seed_all(1)
 
