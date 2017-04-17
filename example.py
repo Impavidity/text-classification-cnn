@@ -19,17 +19,18 @@ class Example(Configurable):
     # self.target = None
     # # Convert each of the targets to one-hot representation: (n_word, n_target)
     if self.dataset_type == "TREC":
+      self.data = {}
       self.sent = {}
       self.sent["words"] = sent[1:]
-      self.sent["targets"] = sent[0]
+      self.sent["targets"] = sent[0].split(':')[0]
 
 
   def convert(self, vocabs):
     if self.dataset_type == "TREC":
       words, target = vocabs
       self.data["words"] = []
-      self.data["targets"] = target[self.sent["targets"]]
+      self.data["targets"] = (vocabs[1][self.sent["targets"]],)
       for word in self.sent["words"]:
-        self.data["words"].append(vocabs[0][word])
+        self.data["words"].append((vocabs[0][word],))
 
 

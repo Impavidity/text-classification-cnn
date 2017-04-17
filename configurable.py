@@ -81,6 +81,14 @@ class Configurable(object):
   def test_file(self):
     return self._config.get('OS', 'test_file')
   argparser.add_argument('--test_file')
+  @property
+  def save_model_file(self):
+    return self._config.get('OS', 'save_model_file')
+  argparser.add_argument('--save_model_file')
+  @property
+  def restore_from(self):
+    return self._config.get('OS', 'restore_from')
+  argparser.add_argument('--restore_from')
 
   # [Dataset]
   @property
@@ -101,6 +109,7 @@ class Configurable(object):
   argparser.add_argument('--min_occur_count')
 
 
+
   # [Learning rate]
   @property
   def learning_rate(self):
@@ -117,6 +126,14 @@ class Configurable(object):
   def valid_interval(self):
     return self._config.getint('Training', 'valid_interval')
   argparser.add_argument('--valid_interval')
+  @property
+  def train_batch_size(self):
+    return self._config.getint('Training', 'train_batch_size')
+  argparser.add_argument('--train_batch_size')
+  @property
+  def test_batch_size(self):
+    return self._config.getint('Training', 'test_batch_size')
+  argparser.add_argument('--test_batch_size')
 
 
 

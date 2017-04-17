@@ -29,11 +29,11 @@ class Bucket(Configurable):
 
   def add(self, example):
     # TODO: After finalize, we can not add data anymore
-    if len(example.length) > self._size: #and self._size != -1:
+    if example.length > self._size: #and self._size != -1:
       #  TODO: we may support size = -1 in the future
       raise ValueError("Bucket of size %d received sequence of len %d" % (self._size, example.length))
     self._data.append(example.data['words'])
-    self._sents.append(example.sents['words'])
+    self._sents.append(example.sent['words'])
     self._target.append(example.data['targets'])
     return len(self._data)-1
 
@@ -42,13 +42,14 @@ class Bucket(Configurable):
       raise ValueError("You need to set size before finalize it")
     if len(self._data) > 0:
       shape = (len(self._data), self._size, len(self._data[-1][-1]))
-      data = np.zeros(shape, dtype=np.int32)
+      data = np.zeros(shape, dtype=np.int64)
       for i, datum in enumerate(self._data):
         datum = np.array(datum)
-        data[i:0:len(datum)] = datum
+        data[i,0:len(datum)] = datum
       self._data = data
       self._sents = np.array(self._sents)
       self._target = np.array(self._target)
+
 
     else:
       print("Finalize Error in bucket")

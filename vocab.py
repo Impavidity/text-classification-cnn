@@ -49,7 +49,7 @@ class Vocab(Configurable):
           line = line.strip().split()
           if line:
             if self.name == 'Targets':
-              self.add(line[0])
+              self.add(line[0].split(':')[0])
             if self.name == 'Words':
               for word in line[1:]:
                 self.add(word)

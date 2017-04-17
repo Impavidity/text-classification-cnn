@@ -115,16 +115,17 @@ class Dataset(Configurable):
           np.random.shuffle(minibatches)
 
         for bkt_idx, bkt_mb in minibatches:
-          data = self[bkt_idx].data[bkt_mb]
-          sents = self[bkt_idx].sents[bkt_mb]
-          target = self[bkt_idx].sents[bkt_mb]
+          data = self.buckets[bkt_idx].data[bkt_mb]
+          sents = self.buckets[bkt_idx].sents[bkt_mb]
+          target = self.buckets[bkt_idx].target[bkt_mb]
           maxlen = np.max(np.sum(np.greater(data[:,:,0], 0), axis=1))
           # Do not use dynamic index like conll_index
           # For word, set 0 data = [(fea1, fea2, fea3), (fea1, fea2, fea3), ...]
           # For target, target = [(target1,), (target2,), ...]
           feed_dict = {
-            'text' : data[:,:maxlen,0],
-            'label' : target[0]
+            'text' : data[:,:maxlen, input_idx],
+            'label' : target[:, target_idx],
+            'batch_size' : len(target)
           }
           yield feed_dict
 

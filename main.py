@@ -6,6 +6,7 @@ from network import cnnTextNetwork
 from configurable import Configurable
 import torch
 import numpy as np
+import os
 
 if __name__=='__main__':
 
@@ -44,9 +45,15 @@ if __name__=='__main__':
 
   network = None
 
-  if cargs['model_type'] == "cnnText":
+  if cargs['model_type'] == "CNNText":
     cargs.pop("model_type", "")
     network = cnnTextNetwork(args, m, **cargs)
+  else:
+    print("The model type is not supported")
+    exit()
+
+  if not os.path.exists(network.save_dir):
+    os.mkdir(network.save_dir)
 
   torch.manual_seed(1)
   np.random.seed(1)

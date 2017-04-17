@@ -14,18 +14,18 @@ class CNNText(nn.Module):
   """
   def __init__(self, args):
     super(CNNText, self).__init__()
-    self.args = args
 
-    input_channel = args.input_channels
-    output_channel = args.output_channels
-    target_class = args.target_class
-    embed_num = args.embed_num
-    embed_dim = args.embed_dim
-    Ks = args.kernel_sizes
+
+    input_channel = args['input_channels']
+    output_channel = args['output_channels']
+    target_class = args['target_class']
+    embed_num = args['embed_num']
+    embed_dim = args['embed_dim']
+    Ks = args['kernel_sizes']
     self.embed = nn.Embedding(embed_num, embed_dim)
     self.convs1 = [nn.Conv2d(input_channel, output_channel, (K, embed_dim)) for K in Ks]
 
-    self.dropout = nn.Dropout(args.dropout)
+    self.dropout = nn.Dropout(args['dropout'])
     self.fc1 = nn.Linear(len(Ks) * output_channel, target_class)
 
   def conv_and_pool(self, x, conv):
@@ -34,7 +34,8 @@ class CNNText(nn.Module):
     return x
 
   def forward(self, x):
-    word_input = self.embed(x) # (batch, sent_len, embed_dim)
+    words = x[:,:,0]
+    word_input = self.embed(words) # (batch, sent_len, embed_dim)
     x = word_input.unsqueeze(1) # (batch, channel_input, sent_len, embed_dim)
     x = [F.relu(conv(x)).squeeze(3) for conv in self.convs1]
     # (batch, channel_output, ~=(sent_len)) * len(Ks)
@@ -44,5 +45,4 @@ class CNNText(nn.Module):
     x = self.dropout(x)
     logit = self.fc1(x) # (batch, target_size)
     return logit
-
 
