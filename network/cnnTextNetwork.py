@@ -125,6 +125,8 @@ class cnnTextNetwork(Configurable):
             print("## Testing: %5.2f" % (test_accuracy))
           print("## Currently the best validation: Accucacy %5.2f" % (valid_accuracy))
           print("## Currently the best testing: Accuracy %5.2f" % (test_accuracy))
+        del feature
+        del target
 
 
   def test(self, validate=False):
