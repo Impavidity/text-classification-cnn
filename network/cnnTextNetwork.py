@@ -92,6 +92,7 @@ class cnnTextNetwork(Configurable):
     acc_corrects = 0 # count the corrects for one log_interval
     acc_sents = 0 # count sents number for one log_interval
 
+    epoch = 0
     while True:
       for batch in self.train_minibatch():
         self.model.train()
@@ -109,11 +110,11 @@ class cnnTextNetwork(Configurable):
         preds = torch.max(logit, 1)[1].view(target.size())  # get the index
         acc_corrects += (preds.data == target.data).sum()
         acc_sents += batch['batch_size']
-        if step % self.log_interval == 0:
-          accuracy = float(acc_corrects) / float(acc_sents) * 100.0
-          print("## [Batch %d] Accuracy : %5.2f" % (step, accuracy))
-          acc_corrects = 0
-          acc_sents = 0
+        # if step % self.log_interval == 0:
+        #   accuracy = float(acc_corrects) / float(acc_sents) * 100.0
+        #   print("## [Batch %d] Accuracy : %5.2f" % (step, accuracy))
+        #   acc_corrects = 0
+        #   acc_sents = 0
 
         if step == 1 or step % self.valid_interval == 0:
           accuracy = self.test(validate=True)
@@ -128,6 +129,14 @@ class cnnTextNetwork(Configurable):
             print("## Testing: %5.2f" % (test_accuracy))
           print("## Currently the best validation: Accucacy %5.2f" % (valid_accuracy))
           print("## Currently the best testing: Accuracy %5.2f" % (test_accuracy))
+      epoch += 1
+      accuracy = float(acc_corrects) / float(acc_sents) * 100
+      print("[EPOCH] %d Accuracy: %5.2f" % (epoch, accuracy))
+      acc_corrects = 0
+      acc_sents = 0
+      lr = self.learning_rate * (0.1 ** (epoch // 30))
+      for param_group in optimizer.param_groups:
+        param_group['lr'] = lr
 
 
   def test(self, validate=False):
