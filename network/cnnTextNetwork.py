@@ -78,8 +78,8 @@ class cnnTextNetwork(Configurable):
     return self._testset.minibatch(self.test_batch_size, self.input_idx, self.target_idx, shuffle=False)
 
   def train(self):
-    if torch.cuda.is_available(): # and use_cuda
-      self.model.cuda()
+    # if torch.cuda.is_available(): # and use_cuda
+    #   self.model.cuda()
 
     optimizer = torch.optim.Adam(self.model.parameters(), lr=self.learning_rate)
     # The optimizer doesn't have adaptive learning rate
@@ -97,8 +97,8 @@ class cnnTextNetwork(Configurable):
         feature, target = batch['text'], batch['label']
         feature = Variable(torch.from_numpy(feature))
         target = Variable(torch.from_numpy(target))[:,0]
-        if torch.cuda.is_available():
-          feature, target = feature.cuda(), target.cuda()
+        # if torch.cuda.is_available():
+        #   feature, target = feature.cuda(), target.cuda()
         optimizer.zero_grad() # Clears the gradients of all optimized Variable
         logit = self.model(feature)
         loss = F.cross_entropy(logit, target)
@@ -142,8 +142,8 @@ class cnnTextNetwork(Configurable):
       feature, target = batch['text'], batch['label']
       feature = Variable(torch.from_numpy(feature))
       target = Variable(torch.from_numpy(target))[:,0]
-      if torch.cuda.is_available():
-        feature, target = feature.cuda(), target.cuda()
+      # if torch.cuda.is_available():
+      #   feature, target = feature.cuda(), target.cuda()
 
       logit = self.model(feature)
       preds = torch.max(logit, 1)[1].view(target.size())  # get the index
