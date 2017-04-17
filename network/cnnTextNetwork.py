@@ -94,39 +94,38 @@ class cnnTextNetwork(Configurable):
 
     while True:
       for batch in self.train_minibatch():
-        feature, target = batch['text'], batch['label']
-        feature = Variable(torch.from_numpy(feature))
-        target = Variable(torch.from_numpy(target))[:,0]
-        # if torch.cuda.is_available():
-        #   feature, target = feature.cuda(), target.cuda()
-        optimizer.zero_grad() # Clears the gradients of all optimized Variable
-        logit = self.model(feature)
-        loss = F.cross_entropy(logit, target)
-        loss.backward()
-        optimizer.step()
-        step += 1
-        preds = torch.max(logit, 1)[1].view(target.size())  # get the index
-        acc_corrects += preds.eq(target).cpu().sum()
-        acc_sents += batch['batch_size']
-        if step % self.log_interval == 0:
-          accuracy = acc_corrects.data.numpy() / float(acc_sents) * 100.0
-          print("## [Batch %d] Accuracy : %5.2f" % (step, accuracy))
+        while True:
+          feature, target = batch['text'], batch['label']
+          feature = Variable(torch.from_numpy(feature))
+          target = Variable(torch.from_numpy(target))[:,0]
+          # if torch.cuda.is_available():
+          #   feature, target = feature.cuda(), target.cuda()
+          optimizer.zero_grad() # Clears the gradients of all optimized Variable
+          logit = self.model(feature)
+          loss = F.cross_entropy(logit, target)
+          loss.backward()
+          optimizer.step()
+          step += 1
+          preds = torch.max(logit, 1)[1].view(target.size())  # get the index
+          acc_corrects += preds.eq(target).cpu().sum()
+          acc_sents += batch['batch_size']
+          if step % self.log_interval == 0:
+            accuracy = acc_corrects.data.numpy() / float(acc_sents) * 100.0
+            print("## [Batch %d] Accuracy : %5.2f" % (step, accuracy))
 
-        if step == 1 or step % self.valid_interval == 0:
-          accuracy = self.test(validate=True)
-          print("## Validation: %5.2f" % (accuracy))
-          if accuracy > best_score:
-            best_score = accuracy
-            valid_accuracy = accuracy
-            print("## Update Model ##")
-            torch.save(self.model, self.save_model_file)
-            print("## Testing ##")
-            test_accuracy = self.test(validate=False)
-            print("## Testing: %5.2f" % (test_accuracy))
-          print("## Currently the best validation: Accucacy %5.2f" % (valid_accuracy))
-          print("## Currently the best testing: Accuracy %5.2f" % (test_accuracy))
-        del feature
-        del target
+          if step == 1 or step % self.valid_interval == 0:
+            accuracy = self.test(validate=True)
+            print("## Validation: %5.2f" % (accuracy))
+            if accuracy > best_score:
+              best_score = accuracy
+              valid_accuracy = accuracy
+              print("## Update Model ##")
+              torch.save(self.model, self.save_model_file)
+              print("## Testing ##")
+              test_accuracy = self.test(validate=False)
+              print("## Testing: %5.2f" % (test_accuracy))
+            print("## Currently the best validation: Accucacy %5.2f" % (valid_accuracy))
+            print("## Currently the best testing: Accuracy %5.2f" % (test_accuracy))
 
 
   def test(self, validate=False):
