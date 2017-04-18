@@ -71,6 +71,7 @@ class cnnTextNetwork(Configurable):
     self.model = model(self.args)
     return
 
+
   def train_minibatch(self):
     return self._trainset.minibatch(self.train_batch_size, self.input_idx, self.target_idx, shuffle=True)
 
