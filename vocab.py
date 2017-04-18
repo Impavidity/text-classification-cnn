@@ -56,6 +56,17 @@ class Vocab(Configurable):
             if self.name == 'Words':
               for word in line[1:]:
                 self.add(word)
+    if self.dataset_type == 'MR':
+      with open(self.train_file) as f:
+        buff = []
+        for line_num, line in enumerate(f):
+          line = line.strip().split()
+          if line:
+            if self.name == 'Targets':
+              self.add(line[0])
+            if self.name == 'Words':
+              for word in line[1:]:
+                self.add(word)
       self.index_vocab()
 
   def add(self, item):
