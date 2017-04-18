@@ -63,7 +63,7 @@ class cnnTextNetwork(Configurable):
                  'embed_num': len(self.words),
                  'embed_dim':100,
                  'target_class': len(self.targets),
-                 'output_channels': 4,
+                 'output_channels': 100,
                  'dropout': 0.9}
     self.model = model(self.args)
     return
