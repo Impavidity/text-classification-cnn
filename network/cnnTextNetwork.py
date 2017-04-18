@@ -58,13 +58,16 @@ class cnnTextNetwork(Configurable):
     self._testset =  Dataset(self.test_file, self._vocabs, self._config, name="Testset")
     print("There are %d sentences in testing set" % (self._testset.sentsNum))
 
-    self.args = {'input_channels':1,
+    self.args = {'input_channels':2,
                  'kernel_sizes':[3,4,5],
-                 'embed_num': len(self.words),
-                 'embed_dim':100,
+                 'words_num': len(self.words),
+                 'words_dim': self.words_size,
                  'target_class': len(self.targets),
                  'output_channels': 100,
-                 'dropout': 0.9}
+                 'dropout': 0.9,
+                 'embeds_num' : self.words.embeds_size,
+                 'embeds_dim' : self.words_size, # Embedding size must be the same with words size
+                 'embeds':self.words.pretrained_embeddings}
     self.model = model(self.args)
     return
 

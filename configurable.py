@@ -89,6 +89,11 @@ class Configurable(object):
   def restore_from(self):
     return self._config.get('OS', 'restore_from')
   argparser.add_argument('--restore_from')
+  @property
+  def embed_file(self):
+    return self._config.get('OS', 'embed_file')
+  argparser.add_argument('--embed_file')
+
 
   # [Dataset]
   @property
@@ -115,6 +120,12 @@ class Configurable(object):
   def learning_rate(self):
     return self._config.getfloat('Learning rate', 'learning_rate')
   argparser.add_argument('--learning_rate')
+
+  # [Sizes]
+  @property
+  def words_size(self):
+    return self._config.getint('Sizes', 'words_sizes')
+  argparser.add_argument('--words_sizes')
 
 
   # [Training]

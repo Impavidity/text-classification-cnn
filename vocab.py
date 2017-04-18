@@ -3,6 +3,7 @@
 
 from configurable import Configurable
 from collections import Counter
+import numpy as np
 
 
 
@@ -40,6 +41,8 @@ class Vocab(Configurable):
     self.save_vocab_file()
     if load_embed_file:
       self.load_embed_file()
+
+    self.pretrained_embeddings = None
 
   def add_train_file(self):
     if self.dataset_type == 'TREC':
@@ -118,7 +121,9 @@ class Vocab(Configurable):
             cur_idx += 1
           except:
             raise ValueError('The embedding file is misformatted at line %d' % (line_num+1))
-    # TODO: Load the pretrain embedding here
+    self.pretrained_embeddings = np.array(embeds, dtype=np.float64)
+    del embeds
+    return
 
 
   def __getitem__(self, key):
@@ -131,3 +136,7 @@ class Vocab(Configurable):
 
   def __len__(self):
     return len(self._str2idx)
+
+  @property
+  def embeds_size(self):
+    return len(self._embed2str)
