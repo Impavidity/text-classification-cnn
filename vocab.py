@@ -28,7 +28,7 @@ class Vocab(Configurable):
     self.SPECIAL_TOKENS = ('<PAD>', '<UNK>')
     self.START_IDX = len(self.SPECIAL_TOKENS)
     self.PAD, self.UNK = range(self.START_IDX)
-
+    self.pretrained_embeddings = None
     self._count = Counter() # Count the number of vocab
 
     self._str2idx = dict(zip(self.SPECIAL_TOKENS, range(self.START_IDX)))
@@ -42,7 +42,7 @@ class Vocab(Configurable):
     if load_embed_file:
       self.load_embed_file()
 
-    self.pretrained_embeddings = None
+
 
   def add_train_file(self):
     if self.dataset_type == 'TREC':
