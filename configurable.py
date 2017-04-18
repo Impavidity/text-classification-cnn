@@ -123,9 +123,9 @@ class Configurable(object):
 
   # [Sizes]
   @property
-  def words_size(self):
-    return self._config.getint('Sizes', 'words_sizes')
-  argparser.add_argument('--words_sizes')
+  def words_dim(self):
+    return self._config.getint('Sizes', 'words_dim')
+  argparser.add_argument('--words_dim')
 
 
   # [Training]

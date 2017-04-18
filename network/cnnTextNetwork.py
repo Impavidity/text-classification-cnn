@@ -61,12 +61,12 @@ class cnnTextNetwork(Configurable):
     self.args = {'input_channels':2,
                  'kernel_sizes':[3,4,5],
                  'words_num': len(self.words),
-                 'words_dim': self.words_size,
+                 'words_dim': self.words_dim,
                  'target_class': len(self.targets),
                  'output_channels': 100,
                  'dropout': 0.9,
                  'embeds_num' : self.words.embeds_size,
-                 'embeds_dim' : self.words_size, # Embedding size must be the same with words size
+                 'embeds_dim' : self.words_dim, # Embedding size must be the same with words size
                  'embeds':self.words.pretrained_embeddings}
     self.model = model(self.args)
     return
