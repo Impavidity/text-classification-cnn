@@ -108,7 +108,7 @@ class Vocab(Configurable):
   def load_embed_file(self):
     self._str2embed = dict(zip(self.SPECIAL_TOKENS, range(self.START_IDX)))
     self._embed2str = dict(zip(range(self.START_IDX), self.SPECIAL_TOKENS))
-    embeds = []
+    embeds = [[0] * self.words_dim, [0] * self.words_dim]
     with open(self.embed_file) as f:
       cur_idx = self.START_IDX
       for line_num, line in enumerate(f):

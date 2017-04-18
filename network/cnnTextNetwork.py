@@ -39,8 +39,7 @@ class cnnTextNetwork(Configurable):
     for i, (vocab_file, name) in enumerate(vocab_file):
       vocab = Vocab(vocab_file, self._config,
                     name = name,
-                    #load_embed_file = (not i),
-                    load_embed_file= False,
+                    load_embed_file = (not i),
                     lower_case = (not i)
                     )
       self._vocabs.append(vocab)
@@ -84,8 +83,8 @@ class cnnTextNetwork(Configurable):
   def train(self):
     # if torch.cuda.is_available(): # and use_cuda
     #   self.model.cuda()
-
-    optimizer = torch.optim.Adam(self.model.parameters(), lr=self.learning_rate)
+    parameter = filter(lambda p: p.requires_grad, self.model.parameters())
+    optimizer = torch.optim.Adam(parameter, lr=self.learning_rate)
     # The optimizer doesn't have adaptive learning rate
 
     step = 0
