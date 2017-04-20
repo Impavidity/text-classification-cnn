@@ -68,6 +68,8 @@ class cnnTextNetwork(Configurable):
                  'embeds_dim' : self.words_dim, # Embedding size must be the same with words size
                  'embeds':self.words.pretrained_embeddings}
     self.model = model(self.args)
+    if self.use_gpu:
+      self.model.cuda()
     return
 
 
@@ -101,6 +103,8 @@ class cnnTextNetwork(Configurable):
         self.model.train()
         feature, target = batch['text'], batch['label']
         feature = Variable(torch.from_numpy(feature))
+        if self.use_gpu:
+          feature.cuda()
         target = Variable(torch.from_numpy(target))[:,0]
         # if torch.cuda.is_available():
         #   feature, target = feature.cuda(), target.cuda()
@@ -111,7 +115,7 @@ class cnnTextNetwork(Configurable):
         optimizer.step()
         step += 1
         preds = torch.max(logit, 1)[1].view(target.size())  # get the index
-        acc_corrects += (preds.data == target.data).sum()
+        acc_corrects += (preds.cpu().data == target.data).sum()
         acc_sents += batch['batch_size']
         # if step % self.log_interval == 0:
         #   accuracy = float(acc_corrects) / float(acc_sents) * 100.0
@@ -157,13 +161,15 @@ class cnnTextNetwork(Configurable):
       # TODO: Prediton to Text
       feature, target = batch['text'], batch['label']
       feature = Variable(torch.from_numpy(feature))
+      if self.use_gpu:
+        feature.cuda()
       target = Variable(torch.from_numpy(target))[:,0]
       # if torch.cuda.is_available():
       #   feature, target = feature.cuda(), target.cuda()
 
       logit = self.model(feature)
       preds = torch.max(logit, 1)[1].view(target.size())  # get the index
-      test_corrects += (preds.data == target.data).sum()
+      test_corrects += (preds.cpu().data == target.data).sum()
       test_sents += batch['batch_size']
     return float(test_corrects) / float(test_sents) * 100.0
 

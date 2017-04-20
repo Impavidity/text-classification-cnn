@@ -93,6 +93,10 @@ class Configurable(object):
   def embed_file(self):
     return self._config.get('OS', 'embed_file')
   argparser.add_argument('--embed_file')
+  @property
+  def use_gpu(self):
+    return self._config.getboolean('OS', 'use_gpu')
+  argparser.add_argument('--use_gpu')
 
 
   # [Dataset]
