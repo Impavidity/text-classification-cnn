@@ -35,13 +35,13 @@ class Example(Configurable):
     if self.dataset_type == "TREC":
       words, target = vocabs
       self.data["words"] = []
-      self.data["targets"] = (target[self.sent["targets"]],)
+      self.data["targets"] = target[self.sent["targets"]]
       for word in self.sent["words"]:
         self.data["words"].append(words[word])
     if self.dataset_type == "MR":
       words, target = vocabs
       self.data["words"] = []
-      self.data["targets"] = (target[self.sent["targets"]],)
+      self.data["targets"] = target[self.sent["targets"]]
       for word in self.sent["words"]:
         self.data["words"].append(words[word])
 

@@ -142,7 +142,7 @@ class Vocab(Configurable):
       # Convert the lower case
       if self.lower_case:
         key = key.lower()
-      if self.pretrained_embeddings:
+      if self.pretrained_embeddings is not None:
         return (self._str2idx.get(key, self.UNK), self._str2embed.get(key, self.UNK))
       else:
         return (self._str2idx.get(key, self.UNK),)
