@@ -123,11 +123,11 @@ class Vocab(Configurable):
     with open(self.embed_file) as f:
       cur_idx = self.START_IDX
       for line_num, line in enumerate(f):
-        line = clean_str(line).split()
+        line = line.strip().split()
         if line:
           try:
-            self._str2embed[line[0]] = cur_idx
-            self._embed2str[cur_idx] = line[0]
+            self._str2embed[clean_str(line[0])] = cur_idx
+            self._embed2str[cur_idx] = clean_str(line[0])
             embeds.append(line[1:])
             cur_idx += 1
           except:
