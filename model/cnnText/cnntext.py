@@ -28,7 +28,7 @@ class CNNText(nn.Module):
     self.static_embed = nn.Embedding(embeds_num, embeds_dim)
     self.static_embed.weight.data.copy_(torch.from_numpy(args['embeds']))
     self.static_embed.weight.requires_grad = False
-    self.convs1 = [nn.Conv2d(input_channel, output_channel, (K, words_dim)) for K in Ks]
+    self.convs1 = [nn.Conv2d(input_channel, output_channel, (K, words_dim), padding=(K-1, 0)) for K in Ks]
 
     self.dropout = nn.Dropout(args['dropout'])
     self.fc1 = nn.Linear(len(Ks) * output_channel, target_class)

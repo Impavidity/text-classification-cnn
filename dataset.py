@@ -61,7 +61,7 @@ class Dataset(Configurable):
         buff = []
         for line_num, line in enumerate(f):
           line = clean_str_sst(line).split()
-          if line:
+          if len(line) > 1:
             buff.append(line)
         self._process_buff(buff)
     return
