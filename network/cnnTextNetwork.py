@@ -105,9 +105,9 @@ class cnnTextNetwork(Configurable):
         self.model.train()
         feature, target = batch['text'], batch['label']
         if self.use_gpu:
-          feature = Variable(torch.from_numpy(feature))
-        else:
           feature = Variable(torch.from_numpy(feature).cuda())
+        else:
+          feature = Variable(torch.from_numpy(feature))
         target = Variable(torch.from_numpy(target))[:,0]
         # if torch.cuda.is_available():
         #   feature, target = feature.cuda(), target.cuda()
@@ -164,9 +164,9 @@ class cnnTextNetwork(Configurable):
       # TODO: Prediton to Text
       feature, target = batch['text'], batch['label']
       if self.use_gpu:
-        feature = Variable(torch.from_numpy(feature))
-      else:
         feature = Variable(torch.from_numpy(feature).cuda())
+      else:
+        feature = Variable(torch.from_numpy(feature))
       target = Variable(torch.from_numpy(target))[:,0]
       # if torch.cuda.is_available():
       #   feature, target = feature.cuda(), target.cuda()
