@@ -7,6 +7,7 @@ from example import Example
 from collections import Counter
 from etc.kmeans import KMeans
 import numpy as np
+from etc.utils import clean_str
 
 class Dataset(Configurable):
   """
@@ -33,6 +34,7 @@ class Dataset(Configurable):
 
 
 
+
   @property
   def n_bkts(self):
     if self._train:
@@ -50,7 +52,7 @@ class Dataset(Configurable):
       with open(filename) as f:
         buff = []
         for line_num, line in enumerate(f):
-          line = line.strip().split()
+          line = clean_str(line).split()
           if line:
             buff.append(line)
         self._process_buff(buff)

@@ -5,7 +5,7 @@ from configurable import Configurable
 from collections import Counter
 import numpy as np
 
-
+from etc.utils import clean_str
 
 class Vocab(Configurable):
   """
@@ -49,18 +49,18 @@ class Vocab(Configurable):
       with open(self.train_file) as f:
         buff = []
         for line_num, line in enumerate(f):
-          line = line.strip().split()
+          line = clean_str(line).split()
           if line:
             if self.name == 'Targets':
-              self.add(line[0].split(':')[0])
+              self.add(line[0])
             if self.name == 'Words':
-              for word in line[1:]:
+              for word in line[2:]:
                 self.add(word)
     if self.dataset_type == 'MR':
       with open(self.train_file) as f:
         buff = []
         for line_num, line in enumerate(f):
-          line = line.strip().split()
+          line = clean_str(line).split()
           if line:
             if self.name == 'Targets':
               self.add(line[0])
@@ -123,7 +123,7 @@ class Vocab(Configurable):
     with open(self.embed_file) as f:
       cur_idx = self.START_IDX
       for line_num, line in enumerate(f):
-        line = line.strip().split()
+        line = clean_str(line).split()
         if line:
           try:
             self._str2embed[line[0]] = cur_idx

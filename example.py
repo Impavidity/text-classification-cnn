@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
+
 from configurable import Configurable
 class Example(Configurable):
   """
@@ -21,27 +23,26 @@ class Example(Configurable):
     if self.dataset_type == "TREC":
       self.data = {}
       self.sent = {}
-      self.sent["words"] = sent[1:]
-      self.sent["targets"] = sent[0].split(':')[0]
+      self.sent["words"] = sent[2:]
+      self.sent["targets"] = sent[0]
     if self.dataset_type == "MR":
       self.data = {}
       self.sent = {}
       self.sent["words"] = sent[1:]
       self.sent["targets"] = sent[0]
 
-
   def convert(self, vocabs):
     if self.dataset_type == "TREC":
       words, target = vocabs
       self.data["words"] = []
-      self.data["targets"] = (vocabs[1][self.sent["targets"]],)
+      self.data["targets"] = (target[self.sent["targets"]],)
       for word in self.sent["words"]:
-        self.data["words"].append((vocabs[0][word],))
+        self.data["words"].append((words[word],))
     if self.dataset_type == "MR":
       words, target = vocabs
       self.data["words"] = []
-      self.data["targets"] = (vocabs[1][self.sent["targets"]],)
+      self.data["targets"] = (target[self.sent["targets"]],)
       for word in self.sent["words"]:
-        self.data["words"].append((vocabs[0][word],))
+        self.data["words"].append((words[word],))
 
 
