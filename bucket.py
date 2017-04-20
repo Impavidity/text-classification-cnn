@@ -44,8 +44,13 @@ class Bucket(Configurable):
       shape = (len(self._data), self._size, len(self._data[-1][-1]))
       data = np.zeros(shape, dtype=np.int64)
       for i, datum in enumerate(self._data):
-        datum = np.array(datum)
-        data[i,0:len(datum)] = datum
+        try:
+          datum = np.array(datum)
+          data[i,0:len(datum)] = datum
+        except:
+          print("sentence %d has Error with data :"%(i+1))
+          print(datum)
+          exit()
       self._data = data
       self._sents = np.array(self._sents)
       self._target = np.array(self._target)
