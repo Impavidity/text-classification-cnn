@@ -41,7 +41,8 @@ class CNNText(nn.Module):
   def forward(self, x):
     words = x[:,:,0]
     word_input = self.embed(words) # (batch, sent_len, embed_dim)
-    static_input = self.static_embed(words)
+    static_words = x[:,:,1]
+    static_input = self.static_embed(static_words)
     x = torch.stack([word_input, static_input], dim=1)# (batch, channel_input, sent_len, embed_dim)
     #x = word_input.unsqueeze(1) # (batch, channel_input, sent_len, embed_dim)
     x = [F.relu(conv(x)).squeeze(3) for conv in self.convs1]

@@ -143,7 +143,7 @@ class Vocab(Configurable):
       if self.lower_case:
         key = key.lower()
       # Do not include embedding currently
-      return (self._str2idx.get(key, self.UNK))
+      return (self._str2idx.get(key, self.UNK), self._str2embed.get(key, self.UNK))
 
   def __len__(self):
     return len(self._str2idx)
