@@ -48,7 +48,7 @@ class Dataset(Configurable):
     :param filename:
     :return:
     """
-    if self.dataset_type == 'TREC' or 'MR':
+    if self.dataset_type == 'TREC' or self.dataset_type == 'MR' or self.dataset_type == 'SST-1':
       with open(filename) as f:
         buff = []
         for line_num, line in enumerate(f):
