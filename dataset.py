@@ -7,7 +7,7 @@ from example import Example
 from collections import Counter
 from etc.kmeans import KMeans
 import numpy as np
-from etc.utils import clean_str
+from etc.utils import clean_str, clean_str_sst
 
 class Dataset(Configurable):
   """
@@ -53,6 +53,14 @@ class Dataset(Configurable):
         buff = []
         for line_num, line in enumerate(f):
           line = clean_str(line).split()
+          if line:
+            buff.append(line)
+        self._process_buff(buff)
+    if self.dataset_type == 'SST-1':
+      with open(filename) as f:
+        buff = []
+        for line_num, line in enumerate(f):
+          line = clean_str_sst(line).split()
           if line:
             buff.append(line)
         self._process_buff(buff)
