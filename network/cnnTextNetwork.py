@@ -67,9 +67,11 @@ class cnnTextNetwork(Configurable):
                  'embeds_num' : self.words.embeds_size,
                  'embeds_dim' : self.words_dim, # Embedding size must be the same with words size
                  'embeds':self.words.pretrained_embeddings}
-    self.model = model(self.args)
+
     if self.use_gpu:
-      self.model.cuda()
+      self.model = model(self.args).cuda()
+    else:
+      self.model = model(self.args)
     return
 
 
@@ -102,9 +104,10 @@ class cnnTextNetwork(Configurable):
       for batch in self.train_minibatch():
         self.model.train()
         feature, target = batch['text'], batch['label']
-        feature = Variable(torch.from_numpy(feature))
         if self.use_gpu:
-          feature.cuda()
+          feature = Variable(torch.from_numpy(feature))
+        else:
+          feature = Variable(torch.from_numpy(feature).cuda())
         target = Variable(torch.from_numpy(target))[:,0]
         # if torch.cuda.is_available():
         #   feature, target = feature.cuda(), target.cuda()
@@ -160,9 +163,10 @@ class cnnTextNetwork(Configurable):
     for batch in minibatch():
       # TODO: Prediton to Text
       feature, target = batch['text'], batch['label']
-      feature = Variable(torch.from_numpy(feature))
       if self.use_gpu:
-        feature.cuda()
+        feature = Variable(torch.from_numpy(feature))
+      else:
+        feature = Variable(torch.from_numpy(feature).cuda())
       target = Variable(torch.from_numpy(target))[:,0]
       # if torch.cuda.is_available():
       #   feature, target = feature.cuda(), target.cuda()
