@@ -55,15 +55,15 @@ class CNNText(nn.Module):
     if self.mode == 'rand':
       words = x[:,:,0]
       word_input = self.embed(words) # (batch, sent_len, embed_dim)
-      x = word_input
+      x = word_input.unsqueeze(1)  # (batch, channel_input, sent_len, embed_dim)
     elif self.mode == 'static':
       static_words = x[:,:,1]
       static_input = self.static_embed(static_words)
-      x = static_input
+      x = static_input.unsqueeze(1)  # (batch, channel_input, sent_len, embed_dim)
     elif self.mode == 'non-static':
       static_words = x[:, :, 1]
       static_input = self.static_embed(static_words)
-      x = static_input
+      x = static_input.unsqueeze(1)  # (batch, channel_input, sent_len, embed_dim)
     elif self.mode == 'multichannel':
       words = x[:, :, 0]
       word_input = self.embed(words)  # (batch, sent_len, embed_dim)
