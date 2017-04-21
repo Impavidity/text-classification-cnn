@@ -57,7 +57,7 @@ class cnnTextNetwork(Configurable):
     self._testset =  Dataset(self.test_file, self._vocabs, self._config, name="Testset")
     print("There are %d sentences in testing set" % (self._testset.sentsNum))
 
-    self.args = {'input_channels':2,
+    self.args = {#'input_channels':2,
                  'kernel_sizes':[3,4,5],
                  'words_num': len(self.words),
                  'words_dim': self.words_dim,
@@ -67,7 +67,8 @@ class cnnTextNetwork(Configurable):
                  'embeds_num' : self.words.embeds_size,
                  'embeds_dim' : self.words_dim, # Embedding size must be the same with words size
                  'embeds':self.words.pretrained_embeddings,
-                 'use_gpu': self.use_gpu}
+                 'use_gpu': self.use_gpu,
+                 'mode': self.mode}
 
     if self.use_gpu:
       self.model = model(self.args).cuda()

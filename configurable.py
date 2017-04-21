@@ -58,6 +58,10 @@ class Configurable(object):
     return self._config.get('OS', 'model_type')
   argparser.add_argument('--model_type')
   @property
+  def mode(self):
+    return self._config.get('OS', 'mode')
+  argparser.add_argument('--mode')
+  @property
   def save_dir(self):
     return self._config.get('OS', 'save_dir')
   argparser.add_argument('--save_dir')
