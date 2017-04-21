@@ -128,6 +128,10 @@ class Configurable(object):
   def epoch_decay(self):
     return self._config.getint('Learning rate', 'epoch_decay')
   argparser.add_argument('--epoch_decay')
+  @property
+  def dropout(self):
+    return self._config.getfloat('Learning rate', 'dropout')
+  argparser.add_argument('--dropout')
 
   # [Sizes]
   @property
