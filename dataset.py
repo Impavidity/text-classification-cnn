@@ -56,7 +56,7 @@ class Dataset(Configurable):
           if line:
             buff.append(line)
         self._process_buff(buff)
-    if self.dataset_type == 'SST-1':
+    if self.dataset_type == 'SST-1' or self.dataset_type == 'SST-2':
       with open(filename) as f:
         buff = []
         for line_num, line in enumerate(f):
