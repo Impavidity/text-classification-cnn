@@ -137,12 +137,23 @@ class Vocab(Configurable):
         line = line.strip().split()
         if line:
           try:
-            self._str2embed[clean_str(line[0])] = cur_idx
-            self._embed2str[cur_idx] = clean_str(line[0])
+            if self.dataset_type != 'SST-1' or self.dataset_type != 'SST-2':
+              self._str2embed[clean_str(line[0])] = cur_idx
+              self._embed2str[cur_idx] = clean_str(line[0])
+            else:
+              self._str2embed[clean_str_sst(line[0])] = cur_idx
+              self._embed2str[cur_idx] = clean_str_sst(line[0])
             embeds.append(line[1:])
             cur_idx += 1
           except:
             raise ValueError('The embedding file is misformatted at line %d' % (line_num+1))
+    # Randomly initialize the pre-trained vector for those words not in pre-train-file
+    for word in self._str2idx.keys():
+      if word not in self._str2embed.keys():
+        self._str2embed[word] = cur_idx
+        self._embed2str[cur_idx] = word
+        embeds.append(list(np.random.uniform(-1, 1, self.words_dim)))
+        cur_idx += 1
     self.pretrained_embeddings = np.array(embeds, dtype=np.float64)
     del embeds
     return
