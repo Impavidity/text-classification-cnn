@@ -147,9 +147,10 @@ class cnnTextNetwork(Configurable):
       print("[EPOCH] %d Accuracy: %5.2f" % (epoch, accuracy))
       acc_corrects = 0
       acc_sents = 0
-      lr = self.learning_rate * (0.1 ** (epoch // 30))
-      for param_group in optimizer.param_groups:
-        param_group['lr'] = lr
+      if (epoch % self.epoch_decay == 0):
+        lr = self.learning_rate * (0.75 ** (epoch // self.epoch_decay))
+        for param_group in optimizer.param_groups:
+          param_group['lr'] = lr
 
 
   def test(self, validate=False):

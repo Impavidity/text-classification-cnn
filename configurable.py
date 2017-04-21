@@ -124,6 +124,10 @@ class Configurable(object):
   def learning_rate(self):
     return self._config.getfloat('Learning rate', 'learning_rate')
   argparser.add_argument('--learning_rate')
+  @property
+  def epoch_decay(self):
+    return self._config.getint('Learning rate', 'epoch_decay')
+  argparser.add_argument('--epoch_decay')
 
   # [Sizes]
   @property
