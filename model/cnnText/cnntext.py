@@ -24,10 +24,15 @@ class CNNText(nn.Module):
     embeds_num = args['embeds_num']
     embeds_dim = args['embeds_dim']
     Ks = args['kernel_sizes']
+    self.use_gpu = args['use_gpu']
     self.embed = nn.Embedding(words_num, words_dim)
     self.static_embed = nn.Embedding(embeds_num, embeds_dim)
     self.static_embed.weight.data.copy_(torch.from_numpy(args['embeds']))
     self.static_embed.weight.requires_grad = False
+
+    #self.conv1 = nn.Conv2d(input_channel, output_channel, (3, words_dim), padding=(2, 0))
+    #self.conv2 = nn.Conv2d(input_channel, output_channel, (4, words_dim), padding=(3, 0))
+    #self.conv3 = nn.Conv2d(input_channel, output_channel, (5, words_dim), padding=(4, 0))
     self.convs1 = [nn.Conv2d(input_channel, output_channel, (K, words_dim), padding=(K-1, 0)) for K in Ks]
 
     self.dropout = nn.Dropout(args['dropout'])
@@ -39,6 +44,8 @@ class CNNText(nn.Module):
     return x
 
   def forward(self, x):
+    if self.use_gpu:
+      self.conv1s = [model.cuda() for model in self.conv1s]
     words = x[:,:,0]
     word_input = self.embed(words) # (batch, sent_len, embed_dim)
     static_words = x[:,:,1]

@@ -66,7 +66,8 @@ class cnnTextNetwork(Configurable):
                  'dropout': 0.5,
                  'embeds_num' : self.words.embeds_size,
                  'embeds_dim' : self.words_dim, # Embedding size must be the same with words size
-                 'embeds':self.words.pretrained_embeddings}
+                 'embeds':self.words.pretrained_embeddings,
+                 'use_gpu': self.use_gpu}
 
     if self.use_gpu:
       self.model = model(self.args).cuda()
