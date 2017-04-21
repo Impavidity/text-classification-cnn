@@ -45,7 +45,7 @@ class CNNText(nn.Module):
 
   def forward(self, x):
     if self.use_gpu:
-      self.conv1s = [model.cuda() for model in self.conv1s]
+      self.conv1s = [model.cuda() for model in self.convs1]
     words = x[:,:,0]
     word_input = self.embed(words) # (batch, sent_len, embed_dim)
     static_words = x[:,:,1]

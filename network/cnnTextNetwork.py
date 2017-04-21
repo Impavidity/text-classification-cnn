@@ -107,9 +107,11 @@ class cnnTextNetwork(Configurable):
         feature, target = batch['text'], batch['label']
         if self.use_gpu:
           feature = Variable(torch.from_numpy(feature).cuda())
+          target = Variable(torch.from_numpy(target).cuda())[:, 0]
         else:
           feature = Variable(torch.from_numpy(feature))
-        target = Variable(torch.from_numpy(target))[:,0]
+          target = Variable(torch.from_numpy(target))[:, 0]
+
         # if torch.cuda.is_available():
         #   feature, target = feature.cuda(), target.cuda()
         optimizer.zero_grad() # Clears the gradients of all optimized Variable
@@ -119,7 +121,7 @@ class cnnTextNetwork(Configurable):
         optimizer.step()
         step += 1
         preds = torch.max(logit, 1)[1].view(target.size())  # get the index
-        acc_corrects += (preds.cpu().data == target.data).sum()
+        acc_corrects += (preds.cpu().data == target.cpu().data).sum()
         acc_sents += batch['batch_size']
         # if step % self.log_interval == 0:
         #   accuracy = float(acc_corrects) / float(acc_sents) * 100.0
