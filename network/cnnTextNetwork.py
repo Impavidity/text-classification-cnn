@@ -91,9 +91,6 @@ class cnnTextNetwork(Configurable):
     else:
       self.model = self.model(self.args)
     parameter = filter(lambda p: p.requires_grad, self.model.parameters())
-    print("Number of parameters here")
-    for item in parameter:
-      print(item)
     optimizer = torch.optim.Adam(parameter, lr=self.learning_rate)
     # The optimizer doesn't have adaptive learning rate
 
