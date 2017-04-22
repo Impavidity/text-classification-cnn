@@ -39,8 +39,13 @@ if __name__=='__main__':
       print("The model doesn't exist")
       exit()
   elif args.validate or args.test:
-    pass
-    "Restore from save_dir"
+    print("Loading model from [%s]..." % (cargs['restore_from']))
+    try:
+      m = torch.load(cargs['restore_from'])
+      cargs.pop(cargs['restore_from'], "")
+    except:
+      print("The model doesn't exist")
+      exit()
   else:
     m = getattr(model, cargs['model_type'])
 
