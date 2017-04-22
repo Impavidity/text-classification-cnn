@@ -106,6 +106,14 @@ class cnnTextNetwork(Configurable):
       for batch in self.train_minibatch():
         self.model.train()
         feature, target = batch['text'], batch['label']
+        # Sanity check
+        for sent in feature:
+          for word in sent:
+            word_str = self.words._idx2str[word[0]]
+            embed_str = self.words._embed2str[word[1]]
+            if word_str != embed_str:
+              print(word_str, embed_str)
+        ##
         if self.use_gpu:
           feature = Variable(torch.from_numpy(feature).cuda())
           target = Variable(torch.from_numpy(target).cuda())[:, 0]
