@@ -75,7 +75,7 @@ class CNNText(nn.Module):
       exit()
     #x = word_input.unsqueeze(1) # (batch, channel_input, sent_len, embed_dim)
     #x = [F.relu(conv(x)).squeeze(3) for conv in self.convs1]
-    x = [F.relu(self.conv1(x)), F.relu(self.conv2(x)), F.relu(self.conv3(x))]
+    x = [F.relu(self.conv1(x)).squeeze(3), F.relu(self.conv2(x)).squeeze(3), F.relu(self.conv3(x)).squeeze(3)]
     # (batch, channel_output, ~=(sent_len)) * len(Ks)
     x = [F.max_pool1d(i, i.size(2)).squeeze(2) for i in x] # max-over-time pooling
     # (batch, channel_output) * len(Ks)
