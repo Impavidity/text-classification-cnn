@@ -70,10 +70,7 @@ class cnnTextNetwork(Configurable):
                  'use_gpu': self.use_gpu,
                  'mode': self.mode}
 
-    if self.use_gpu:
-      self.model = model(self.args).cuda()
-    else:
-      self.model = model(self.args)
+    self.model = model
     return
 
 
@@ -89,6 +86,10 @@ class cnnTextNetwork(Configurable):
   def train(self):
     # if torch.cuda.is_available(): # and use_cuda
     #   self.model.cuda()
+    if self.use_gpu:
+      self.model = self.model(self.args).cuda()
+    else:
+      self.model = self.model(self.args)
     parameter = filter(lambda p: p.requires_grad, self.model.parameters())
     optimizer = torch.optim.Adam(parameter, lr=self.learning_rate)
     # The optimizer doesn't have adaptive learning rate
