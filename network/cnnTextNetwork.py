@@ -103,7 +103,7 @@ class cnnTextNetwork(Configurable):
     acc_sents = 0 # count sents number for one log_interval
 
     epoch = 0
-    while epoch < 40:
+    while True:
       for batch in self.train_minibatch():
         self.model.train()
         feature, target = batch['text'], batch['label']
