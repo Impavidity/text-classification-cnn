@@ -11,8 +11,11 @@ import os
 if __name__=='__main__':
 
   import argparse
-  torch.manual_seed(1)
-  np.random.seed(1)
+  torch.manual_seed(3435)
+  np.random.seed(3435)
+  if torch.cuda.is_available():
+    torch.cuda.manual_seed(3435)
+
 
   argparser = argparse.ArgumentParser()
   argparser.add_argument('--train', action='store_true')
