@@ -71,6 +71,8 @@ if __name__=='__main__':
   if args.train:
     network.train()
   elif args.validate:
-    network.test(validate=True)
+    print("### The accuracy for validate set: ")
+    print(network.test(validate=True))
   elif args.test:
-    network.test(validate=False)
+    print("### The accuracy for test set: ")
+    print(network.test(validate=False))
