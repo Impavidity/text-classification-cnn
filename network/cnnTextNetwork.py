@@ -102,7 +102,7 @@ class cnnTextNetwork(Configurable):
     acc_sents = 0 # count sents number for one log_interval
 
     epoch = 0
-    while True:
+    while epoch < 40:
       for batch in self.train_minibatch():
         self.model.train()
         feature, target = batch['text'], batch['label']
@@ -146,11 +146,9 @@ class cnnTextNetwork(Configurable):
             valid_accuracy = accuracy
             print("## Update Model ##")
             torch.save(self.model, self.save_model_file)
-            print("## Testing ##")
-            test_accuracy = self.test(validate=False)
-            print("## Testing: %5.2f" % (test_accuracy))
+
           print("## Currently the best validation: Accucacy %5.2f" % (valid_accuracy))
-          print("## Currently the best testing: Accuracy %5.2f" % (test_accuracy))
+
       epoch += 1
       accuracy = float(acc_corrects) / float(acc_sents) * 100
       print("[EPOCH] %d Accuracy: %5.2f" % (epoch, accuracy))
