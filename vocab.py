@@ -31,8 +31,8 @@ class Vocab(Configurable):
     self.pretrained_embeddings = None
     self._count = Counter() # Count the number of vocab
 
-    self._str2idx = {}
-    self._idx2str = {}
+    self._str2idx = dict(zip(self.SPECIAL_TOKENS, range(self.START_IDX)))
+    self._idx2str = dict(zip(range(self.START_IDX), self.SPECIAL_TOKENS))
 
     self._str2embed = {}
     self._embed2str = {}
@@ -47,6 +47,7 @@ class Vocab(Configurable):
   def add_train_file(self):
     if self.dataset_type == 'TREC':
       with open(self.train_file) as f:
+        buff = []
         for line_num, line in enumerate(f):
           line = clean_str(line).split()
           if line:
@@ -57,6 +58,7 @@ class Vocab(Configurable):
                 self.add(word)
     if self.dataset_type == 'MR':
       with open(self.train_file) as f:
+        buff = []
         for line_num, line in enumerate(f):
           line = clean_str(line).split()
           if line:
@@ -67,6 +69,7 @@ class Vocab(Configurable):
                 self.add(word)
     if self.dataset_type == 'SST-1' or self.dataset_type == 'SST-2':
       with open(self.train_file) as f:
+        buff = []
         for line_num, line in enumerate(f):
           line = clean_str_sst(line).split()
           if line:
@@ -93,12 +96,7 @@ class Vocab(Configurable):
     - Assign ID to them
     - Go back to first step
     """
-    if self.name == 'Words':
-      cur_idx = self.START_IDX
-      self._str2idx = dict(zip(self.SPECIAL_TOKENS, range(self.START_IDX)))
-      self._idx2str = dict(zip(range(self.START_IDX), self.SPECIAL_TOKENS))
-    else:
-      cur_idx = 0
+    cur_idx = self.START_IDX
     buff = []
     for word_and_count in self._count.most_common():
       if (not buff) or (buff[-1][1]==word_and_count[1]):
