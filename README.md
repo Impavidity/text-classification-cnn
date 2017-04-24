@@ -15,7 +15,10 @@ text-classification-cnn
   │       └── cnntext.py
   ├── network
   │   └── cnnTextNetwork.py
+  ├── data
+  ├── saves
   ├── README.md
+  ├── getData.sh
   ├── bucket.py
   ├── configurable.py
   ├── dataset.py
@@ -36,6 +39,14 @@ text-classification-cnn
 
 ## Quick Start
 
+Run 
+
+```
+bash getData.sh
+```
+
+to get dataset.
+
 To run the model on [TREC](http://cogcomp.cs.illinois.edu/Data/QA/QC/) dataset on [rand](Model Type), just run the following code.
 
 ```
@@ -49,8 +60,39 @@ saves/model_file
 ```
 You can modify these parameters under these [instructions](Configurable File)
 
+To test the model, you can use the following command.
+
+```
+python main.py --config_file config/classification.cfg --model_type CNNText --test --restore_from saves/trec/model_file
+```
+
+You need to specify the config file and the path to model file here. Note: The path need to be the same as the declaration in the config file.
 
 ## Configurable File
+
+- model_type: **CNNText** in this case.
+- mode: **rand**, **static**, **non-static** and **multichannel** which are specified [here](Model Type)
+- save_dir: the path you want to save the model parameters
+- word_file: all words appearing in the dataset
+- target_file: all labels appearing in the dataset
+- data_dir: the path of dataset
+- train_file: the name of the training file
+- valid_file: the name of the validation file
+- test_file: the name of the test file
+- save_model_file: the name you want to use for the model parameters
+- restore_from: this option will be used we you want to restore file for validation and testing
+- embed_file: embedding file
+- use_gpu: use GPU or not
+- words_dim: the dimension of the words. This is same with pre-trained word embedding.
+- n_bkts: the bucket number for training dataset. Group the sentence according to the lengths
+- n_valid_bkts: the bucket number for testing dataset.
+- dataset_type: the dataset you used. **TREC**, **SST-1** and **SST-2** in this case.
+- min_occur_count: set the word as *UNK* according to its frequency.
+- learning_rate: leanring rate
+- epoch_decay: decay the learning rate 0.75 for every *epoch_dacay* epoch
+- valid_interval: validate for every *valid_interval* iterations
+- train_batch_size: the token number for each batch in training
+- test_batch_size: the token number for  each batch in testing
 
 
 ## Dataset and Embeddings 
@@ -66,18 +108,11 @@ Furthermore, we filter the word embeddings to fit specific dataset. These file c
 ## Results
 
 
+|dataset|rand|static|non-static|multichannel|
+|---|---|---|---|---|
+|TREC|91.98|90.32|92.62|93.36|
+|SST-1|42.59|46.33|44.32|47.32|
+|SST-2|82.20|86.42|85.43|84.39|
 
-rand 92.16
-static 88.94
-non-static 92.62
-multichannel 93.45
+We do not tune the parameters for each dataset. And the implementation is simplified from the original version on regularization.
 
-rand 42.59
-static 46.33
-non-static 44.32
-multichannel 43.63
-
-rand 82.20
-static 86.42
-non-static 85.43
-multichannel 83.82
