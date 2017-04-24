@@ -105,6 +105,16 @@ We experiment the model on the following three datasets.
 
 Furthermore, we filter the word embeddings to fit specific dataset. These file can be found in dir *data*.
 
+For self-defined data, please keep the format as
+
+```
+label1 sentence
+label2 sentence
+```
+
+Or you can modify the *reading_dataset* in *dataset.py*, *add_train_file* in *vocab.py* and *example.py* to fit your own dataset.
+
+
 ## Results
 
 
