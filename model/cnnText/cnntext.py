@@ -31,6 +31,8 @@ class CNNText(nn.Module):
       input_channel = 1
     self.use_gpu = args['use_gpu']
     self.embed = nn.Embedding(words_num, words_dim)
+    if self.mode == 'multichannel':
+      self.embed.weight.data.copy_(torch.from_numpy(args['embeds']))
     self.static_embed = nn.Embedding(embeds_num, embeds_dim)
     self.static_embed.weight.data.copy_(torch.from_numpy(args['embeds']))
     if self.mode == 'static' or self.mode == 'multichannel':
