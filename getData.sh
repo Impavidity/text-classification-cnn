@@ -1,3 +1,5 @@
+mkdir data
+mkdir saves
 wget http://ocp59jkku.bkt.clouddn.com/sst-1.zip -P data/
 wget http://ocp59jkku.bkt.clouddn.com/sst-2.zip -P data/
 wget http://ocp59jkku.bkt.clouddn.com/trec.zip -P data/
