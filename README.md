@@ -36,11 +36,37 @@ text-classification-cnn
 
 ## Quick Start
 
-To run the model on [TREC](http://cogcomp.cs.illinois.edu/Data/QA/QC/) dataset on [rand](## Model Type)
+To run the model on [TREC](http://cogcomp.cs.illinois.edu/Data/QA/QC/) dataset on [rand](Model Type), just run the following code.
 
 ```
 python main.py --config_file config/classification.cfg --model_type CNNText --train
 ```
+
+The file will be saved in 
+
+```
+saves/model_file
+```
+You can modify these parameters under these [instructions](Configurable File)
+
+
+## Configurable File
+
+
+## Dataset and Embeddings 
+
+We experiment the model on the following three datasets.
+
+- TREC: We use the 1-5000 for training, 5001-5452 for validation, and original test dataset for testing.
+- SST-1: Keep the original splits and train with phrase level dataset and test on sentence level dataset.
+- SST-2: Same as above.
+
+Furthermore, we filter the word embeddings to fit specific dataset. These file can be found in dir *data*.
+
+## Results
+
+
+
 rand 92.16
 static 88.94
 non-static 92.62

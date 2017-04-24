@@ -31,12 +31,11 @@ class CNNText(nn.Module):
       input_channel = 1
     self.use_gpu = args['use_gpu']
     self.embed = nn.Embedding(words_num, words_dim)
-    if self.mode == 'multichannel':
-      self.embed.weight.data.copy_(torch.from_numpy(args['embeds']))
     self.static_embed = nn.Embedding(embeds_num, embeds_dim)
     self.static_embed.weight.data.copy_(torch.from_numpy(args['embeds']))
-    if self.mode == 'static' or self.mode == 'multichannel':
-      self.static_embed.weight.requires_grad = False
+    self.non_static_embed = nn.Embedding(embeds_num, embeds_dim)
+    self.non_static_embed.weight.data.copy_(torch.from_numpy(args['embeds']))
+    self.static_embed.weight.requires_grad = False
 
     self.conv1 = nn.Conv2d(input_channel, output_channel, (3, words_dim), padding=(2, 0))
     self.conv2 = nn.Conv2d(input_channel, output_channel, (4, words_dim), padding=(3, 0))
@@ -63,12 +62,12 @@ class CNNText(nn.Module):
       static_input = self.static_embed(static_words)
       x = static_input.unsqueeze(1)  # (batch, channel_input, sent_len, embed_dim)
     elif self.mode == 'non-static':
-      static_words = x[:, :, 1]
-      static_input = self.static_embed(static_words)
-      x = static_input.unsqueeze(1)  # (batch, channel_input, sent_len, embed_dim)
+      non_static_words = x[:, :, 1]
+      non_static_input = self.non_static_embed(non_static_words)
+      x = non_static_input.unsqueeze(1)  # (batch, channel_input, sent_len, embed_dim)
     elif self.mode == 'multichannel':
-      words = x[:, :, 0]
-      word_input = self.embed(words)  # (batch, sent_len, embed_dim)
+      words = x[:, :, 1]
+      word_input = self.non_static_embed(words)  # (batch, sent_len, embed_dim)
       static_words = x[:, :, 1]
       static_input = self.static_embed(static_words)
       x = torch.stack([word_input, static_input], dim=1)# (batch, channel_input, sent_len, embed_dim)
