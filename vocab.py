@@ -7,6 +7,8 @@ import numpy as np
 
 from etc.utils import clean_str, clean_str_sst
 
+
+
 class Vocab(Configurable):
   """
   Vocab for
@@ -46,7 +48,7 @@ class Vocab(Configurable):
 
   def add_train_file(self):
     if self.dataset_type == 'TREC':
-      with open(self.train_file) as f:
+      with open(self.train_file, encoding='utf-8') as f:
         for line_num, line in enumerate(f):
           line = clean_str(line).split()
           if line:
@@ -148,7 +150,7 @@ class Vocab(Configurable):
 
 
   def __getitem__(self, key):
-    if isinstance(key, basestring):
+    if isinstance(key, str):
       # Convert the lower case
       if self.lower_case:
         key = key.lower()
